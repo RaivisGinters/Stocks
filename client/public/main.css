@@ -1,0 +1,17 @@
+ul {
+    margin-bottom: 0 !important;
+}
+.rowspan {
+    vertical-align: middle !important;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.sort {
+    cursor: pointer;
+}
+.sort-icon {
+    margin-left: 3px;
+    font-size: 1.2em;
+    position: relative;
+    top: 2px;
+}
