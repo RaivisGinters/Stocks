@@ -8,8 +8,6 @@ export default class Statistics extends Component {
 
         this.state = {
             errors: [],
-            dateFrom: '',
-            dateTo: '',
             data: {},
             jsonData: [],
             chart: null,
@@ -26,24 +24,32 @@ export default class Statistics extends Component {
                     highestDate: null,
                     lowest: null,
                     lowestDate: null,
+                    start: null,
+                    end: null,
                 },
                 'high': {
                     highest: null,
                     highestDate: null,
                     lowest: null,
                     lowestDate: null,
+                    start: null,
+                    end: null,
                 },
                 'low': {
                     highest: null,
                     highestDate: null,
                     lowest: null,
                     lowestDate: null,
+                    start: null,
+                    end: null,
                 },
                 'close': {
                     highest: null,
                     highestDate: null,
                     lowest: null,
                     lowestDate: null,
+                    start: null,
+                    end: null,
                 },
             }
 
@@ -71,6 +77,16 @@ export default class Statistics extends Component {
                         eachDatavalue.lowest = currentValue;
                         eachDatavalue.lowestDate = eachDate;
                     }
+
+                    if (i === 0) {
+                        eachDatavalue.start = currentValue;
+                        eachDatavalue.startDate = eachDate;
+                    }
+
+                    if (i + 1 === jsonData.length) {
+                        eachDatavalue.end = currentValue;
+                        eachDatavalue.endDate = eachDate;
+                    }
                 }
             }
 
@@ -80,12 +96,21 @@ export default class Statistics extends Component {
         }
     }
 
-    calculateChanges(highest, lowest) {
-        let v1 = highest - lowest;
-        let v2 = (highest + lowest) / 2;
-        const result = (v1 / v2) * 100;
+    calculateChanges(start, end) {
+        const v1 = end - start;
+        const v2 = (end + start) / 2;
+        const v3 = (v1 / v2) * 100;
+        const result = v3.toFixed(2);
 
-        return `${result.toFixed(2)}%`;
+        if (start < end) {
+            return (
+                <p className="text-success">{`${result}%`}</p>
+            )
+        } else {
+            return (
+                <p className="text-danger">{`${result}%`}</p>
+            )
+        }
     }
 
     render() {
@@ -97,47 +122,48 @@ export default class Statistics extends Component {
         }
 
         return (
-            <table className="table">
-                <thead className="thead-dark">
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Value</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Period changes</th>
-                    </tr>
-                </thead>
+            <div className="table-responsive">
+                <table className="table">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Period changes</th>
+                        </tr>
+                    </thead>
 
-                {Object.keys(data).map((eachKey) => {
-                    return (
-                        <tbody key={key++}>
-                            <tr>
-                                <td>
-                                    {eachKey} highest
-                                </td>
-                                <td className="text-success">
-                                    {data[eachKey].highest}
-                                </td>
-                                <td className="text-success">
-                                    {data[eachKey].highestDate}
-                                </td>
-                                <td rowSpan="2" className="rowspan">{this.calculateChanges(data[eachKey].highest, data[eachKey].lowest)}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {eachKey} lowest
-                                </td>
-                                <td className="text-danger">
-                                    {data[eachKey].lowest}
-                                </td>
-                                <td className="text-danger">
-                                    {data[eachKey].lowestDate}
-                                </td>
-                            </tr>
-                        </tbody>
+                    {Object.keys(data).map((eachKey) => {
+                        return (
+                            <tbody key={key++}>
+                                <tr>
+                                    <td>
+                                        {eachKey} start
+                                    </td>
+                                    <td className="text-success">
+                                        {data[eachKey].start}
+                                    </td>
+                                    <td className="text-success">
+                                        {data[eachKey].startDate}
+                                    </td>
+                                    <td rowSpan="2" className="rowspan">{this.calculateChanges(data[eachKey].start, data[eachKey].end)}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {eachKey} end
+                                    </td>
+                                    <td className="text-danger">
+                                        {data[eachKey].end}
+                                    </td>
+                                    <td className="text-danger">
+                                        {data[eachKey].endDate}
+                                    </td>
+                                </tr>
+                            </tbody>
                         )
-                    }
-                )}
-            </table>
+                    })}
+                </table>
+            </div>
         );
     }
 }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ApexCharts from 'apexcharts';
 
-import Chart from './components/Chart.jsx';
+import CandlestickChart from './components/CandlestickChart.jsx';
+import LineChart from './components/LineChart.jsx';
+
 import Statistics from './components/Statistics.jsx';
 import Table from './components/Table.jsx';
 
@@ -17,9 +19,11 @@ export default class Stocks extends Component {
             dateFrom: '',
             dateTo: '',
             jsonData: [],
+            type: 'candlestick'
         };
 
         this.fetchData = this.fetchData.bind(this);
+        this.setType = this.setType.bind(this);
     }
 
     componentDidMount() {
@@ -90,7 +94,7 @@ export default class Stocks extends Component {
             errors: false,
         });
 
-        fetch(`/request-data?dateFrom=${dateFrom}&dateTo=${dateTo}`)
+        fetch(`/api/request-data?dateFrom=${dateFrom}&dateTo=${dateTo}`)
         .then(res => res.json())
         .then(jsonResponse => {
             const jsonData = JSON.parse(jsonResponse.content);
@@ -116,8 +120,14 @@ export default class Stocks extends Component {
         });
     }
 
+    setType(type) {
+        this.setState({
+            type,
+        });
+    }
+
     render() {
-        const { loading, errors, data, jsonData } = this.state;
+        const { loading, errors, data, jsonData, type } = this.state;
         let key = 0;
 
         return (
@@ -178,10 +188,41 @@ export default class Stocks extends Component {
                     </div>
                 </form>
 
+                <div class="hidden-divider"></div>
+
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-12 col-xl-8">
-                            <Chart jsonData={jsonData} />
+                            {jsonData.length > 0
+                                ? (
+                                    <div className="row justify-content-center">
+                                        <div className="col-6 col-md-4">
+                                            <div className="custom-control custom-radio custom-control-inline" onClick={() => this.setType('candlestick')}>
+                                                <input type="radio" name="candlestick" className="custom-control-input" onChange={() => {}} checked={type === 'candlestick'} />
+                                                <label className="custom-control-label pointer">Candlestick chart</label>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-6 col-md-4">
+                                            <div className="custom-control custom-radio custom-control-inline" onClick={() => this.setType('line')}>
+                                                <input type="radio"  name="line" className="custom-control-input" onChange={() => {}} checked={type === 'line'} />
+                                                <label className="custom-control-label pointer">Line chart</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                                : null
+                            }
+
+                            {type === 'candlestick'
+                                ? <CandlestickChart jsonData={jsonData} />
+                                : null
+                            }
+
+                            {type === 'line'
+                                ? <LineChart jsonData={jsonData} />
+                                : null
+                            }
                         </div>
                         <div className="col-12 col-xl-4">
                             <Statistics jsonData={jsonData} />
