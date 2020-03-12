@@ -18,7 +18,7 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
-        fetch('/checkToken', {
+        fetch('/api/checkToken', {
             credentials: 'include',
         })
         .then(res => res.json())
@@ -60,7 +60,7 @@ export default class Login extends Component {
             loading: true,
         });
 
-        fetch('/login', {
+        fetch('/api/login', {
             method: 'POST',
             body: JSON.stringify({
                 username,

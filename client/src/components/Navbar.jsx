@@ -21,7 +21,7 @@ export default class Navbar extends Component {
     logout(event) {
         event.preventDefault();
 
-        fetch('/logout', {
+        fetch('/api/logout', {
             credentials: 'include',
         })
         .then(res => res.json())

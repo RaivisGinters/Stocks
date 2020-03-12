@@ -13,7 +13,7 @@ export default function withAuth(ComponentToProtect) {
         }
 
         componentDidMount() {
-            fetch('/checkToken', {
+            fetch('/api/checkToken', {
                 credentials: 'include',
             })
             .then(res => res.json())
