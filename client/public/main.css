@@ -15,3 +15,9 @@ ul {
     position: relative;
     top: 2px;
 }
+.pointer {
+    cursor: pointer !important;
+}
+.hidden-divider {
+    padding-top: 12px;
+}
