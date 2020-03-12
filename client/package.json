@@ -11,7 +11,8 @@
     "react-scripts": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "build": "react-scripts build"
   },
   "browserslist": {
     "production": [
@@ -25,5 +26,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080/api"
+  "proxy": "http://localhost:8080"
 }
